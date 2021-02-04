@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   AppBar,
   IconButton,
@@ -12,7 +13,20 @@ import {
   CardMedia,
   CardContent,
   CardActions,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  TextField,
+  DialogActions,
 } from '@material-ui/core';
+import BottomNavigation from '@material-ui/core/BottomNavigation';
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+
+import FolderIcon from '@material-ui/icons/Folder';
+import RestoreIcon from '@material-ui/icons/Restore';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
 import MenuIcon from '@material-ui/icons/Menu';
 import LayerIcon from '@material-ui/icons/Layers';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
@@ -65,6 +79,22 @@ const useStyles = makeStyles(theme => ({
 
 export default function App() {
   const classes = useStyles();
+
+  const [value, setValue] = useState('recents');
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <>
       {/* панель навигации */}
@@ -85,9 +115,47 @@ export default function App() {
               Web Developer Blog
             </Typography>
             <Box mr={3}>
-              <Button color="inherit" variant="outlined">
+              <Button
+                color="inherit"
+                variant="outlined"
+                onClick={handleClickOpen}
+              >
                 Log In
               </Button>
+              <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="form-dialog-title"
+              >
+                <DialogTitle id="form-dialog-title">Log In</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>Log In to see videos</DialogContentText>
+                  <TextField
+                    autofocus
+                    margin="dense"
+                    id="name"
+                    label="Email Address"
+                    type="email"
+                    fullWidth
+                  />
+                  <TextField
+                    autofocus
+                    margin="dense"
+                    id="pass"
+                    label="Password"
+                    type="password"
+                    fullWidth
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button color="primary" onClick={handleClose}>
+                    Cancel
+                  </Button>
+                  <Button color="primary" onClick={handleClose}>
+                    Log In
+                  </Button>
+                </DialogActions>
+              </Dialog>
             </Box>
             <Button color="secondary" variant="contained">
               Sign Up
@@ -202,6 +270,47 @@ export default function App() {
           </Grid>
         </Container>
       </main>
+      <footer>
+        <Typography variant="h6" align="center" gutterBottom>
+          Footer
+        </Typography>
+        <BottomNavigation
+          value={value}
+          onChange={handleChange}
+          className={classes.root}
+        >
+          <BottomNavigationAction
+            label="Restore"
+            value="restore"
+            icon={<RestoreIcon />}
+          />
+          <BottomNavigationAction
+            label="Favorites"
+            value="favorites"
+            icon={<FavoriteIcon />}
+          />
+          <BottomNavigationAction
+            label="Nearby"
+            value="nearby"
+            icon={<LocationOnIcon />}
+          />
+          <BottomNavigationAction
+            label="Folder"
+            value="folder"
+            icon={<FolderIcon />}
+          />
+        </BottomNavigation>
+
+        <Typography
+          color="textSecondary"
+          component="p"
+          variant="subtitle1"
+          align="center"
+          gutterBottom
+        >
+          Web Developer Blog React js Material UI
+        </Typography>
+      </footer>
     </>
   );
 }
